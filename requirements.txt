@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-multipart
+Pillow
+fpdf
+docx2pdf
+PyMuPDF
+jinja2
+setuptools
