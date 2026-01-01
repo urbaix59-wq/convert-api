@@ -1,8 +1,7 @@
 from pathlib import Path
 from PIL import Image
 from fpdf import FPDF
-import docx2pdf
-import subprocess
+
 import shutil
 import fitz  # PyMuPDF
 
@@ -47,26 +46,7 @@ def convert_file(input_path):
                 pdf.multi_cell(0, 10, line)
 
         pdf.output(output_path)
-        return output_path
-
-    # DOCX → PDF
-    if ext == ".docx":
-        output_path = input_path.with_suffix(".pdf")
-        docx2pdf.convert(str(input_path), str(output_path))
-        return output_path
-
-    # ODT → PDF
-    if ext == ".odt":
-        output_path = input_path.with_suffix(".pdf")
-        subprocess.run([
-            r"C:\Program Files\LibreOffice\program\soffice.exe",
-            "--headless",
-            "--convert-to", "pdf",
-            "--outdir", str(input_path.parent),
-            str(input_path)
-        ])
-        return output_path
-
+        return output_path 
     # PDF → PDF (compression)
     if ext == ".pdf":
         converted = input_path.with_name(input_path.stem + "_converted.pdf")
@@ -77,4 +57,4 @@ def convert_file(input_path):
 
         return compressed
 
-    raise ValueError(f"Format non supporté : {ext}")
+    raise ValueError(f"Format non supporté sur Render : {ext}")
