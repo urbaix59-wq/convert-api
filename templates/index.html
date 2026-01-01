@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Convertisseur PDF - Youcef Tools</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">YP</span>
+            <span class="logo-text">Youcef Convert</span>
+        </div>
+
+        <nav class="nav">
+            <a href="#" class="nav-link">Convertir</a>
+            <a href="#" class="nav-link">Outils</a>
+            <a href="#" class="nav-link">À propos</a>
+        </nav>
+
+        <div class="header-actions">
+            <button class="btn btn-outline">Se connecter</button>
+            <button class="btn btn-primary">Essai gratuit</button>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main">
+        <section class="card">
+            <h1 class="title">Convertisseur PDF</h1>
+            <p class="description">
+                Glissez un fichier PDF, Word, Excel, PowerPoint ou une image pour le convertir en PDF
+                avec le moteur de Youcef.
+            </p>
+
+            <!-- FORMULAIRE -->
+            <form id="convert-form" class="upload-area" action="/convert" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="file-input" class="file-input">
+
+                <label for="file-input" class="upload-label">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-text">
+                        <span class="upload-title">Sélectionner un fichier</span>
+                        <span class="upload-subtitle">ou glissez-déposez votre fichier ici</span>
+                    </div>
+                </label>
+
+                <button type="submit" class="btn btn-convert">Convertir en PDF</button>
+            </form>
+
+            <p class="small-print">
+                Votre fichier est traité localement par votre propre moteur.  
+                Vous restez maître de vos données.
+            </p>
+
+            <div id="status" class="status"></div>
+        </section>
+    </main>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+const form = document.getElementById("convert-form");
+const fileInput = document.getElementById("file-input");
+const statusEl = document.getElementById("status");
+
+// Message si aucun fichier
+form.addEventListener("submit", function (e) {
+    if (!fileInput.files.length) {
+        e.preventDefault();
+        statusEl.textContent = "Choisis d’abord un fichier à convertir.";
+        statusEl.classList.add("status-error");
+    } else {
+        statusEl.textContent = "Conversion en cours...";
+        statusEl.classList.remove("status-error");
+        statusEl.classList.add("status-info");
+    }
+});
+
+// Drag & drop
+const uploadArea = document.querySelector(".upload-area");
+
+["dragenter", "dragover"].forEach(evtName => {
+    uploadArea.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("upload-area-hover");
+    });
+});
+
+["dragleave", "drop"].forEach(evtName => {
+    uploadArea.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("upload-area-hover");
+    });
+});
+
+uploadArea.addEventListener("drop", (e) => {
+    const files = e.dataTransfer.files;
+    if (files.length) {
+        fileInput.files = files;
+        statusEl.textContent = `${files[0].name} prêt à être converti.`;
+        statusEl.classList.add("status-info");
+    }
+});
+</script>
+
+</body>
+</html>
